@@ -210,6 +210,10 @@ public class WireMock {
         return new MatchesXPathPattern(value, valuePattern);
     }
 
+    public static StringValuePattern matchingFormDataPattern(String key, String value) {
+        return new MatchesFormDataPattern(key, value);
+    }
+
     public static StringValuePattern containing(String value) {
         return new ContainsPattern(value);
     }

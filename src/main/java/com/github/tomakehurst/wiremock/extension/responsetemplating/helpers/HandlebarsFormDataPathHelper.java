@@ -46,7 +46,7 @@ public class HandlebarsFormDataPathHelper extends HandlebarsHelper<String> {
         return getValueFromRequestObject(formDataPath, formData);
     }
 
-    private Map convertBodyToFormData(String body) {
+    public static Map convertBodyToFormData(String body) {
         // Trying to create map of request body or query string parameters
         Map object = new HashMap();
         String[] pairedValues = body.split("&");
@@ -58,7 +58,7 @@ public class HandlebarsFormDataPathHelper extends HandlebarsHelper<String> {
         return object;
     }
 
-    private String decodeUTF8Value(String value) {
+    public static String decodeUTF8Value(String value) {
 
         String decodedValue = "";
         try {
@@ -70,7 +70,7 @@ public class HandlebarsFormDataPathHelper extends HandlebarsHelper<String> {
         return decodedValue;
     }
 
-    private CharSequence getValueFromRequestObject(String path, Map requestObject) {
+    public static CharSequence getValueFromRequestObject(String path, Map requestObject) {
         String fieldName = path;
         String[] fieldNames = fieldName.split("\\.");
         Object tempObject = requestObject;

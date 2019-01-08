@@ -25,8 +25,6 @@ import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Iterators;
 
 import java.io.IOException;
 import java.lang.reflect.Constructor;
@@ -48,6 +46,7 @@ public class StringValuePatternJsonDeserializer extends JsonDeserializer<StringV
             .put("matchesJsonPath", MatchesJsonPathPattern.class)
             .put("equalToXml", EqualToXmlPattern.class)
             .put("matchesXPath", MatchesXPathPattern.class)
+            .put("matchesFormData", MatchesFormDataPattern.class)
             .put("contains", ContainsPattern.class)
             .put("matches", RegexPattern.class)
             .put("doesNotMatch", NegativeRegexPattern.class)
@@ -75,6 +74,8 @@ public class StringValuePatternJsonDeserializer extends JsonDeserializer<StringV
             return deserialiseMatchesXPathPattern(rootNode);
         } else if (patternClass.equals(EqualToPattern.class)) {
             return deserializeEqualTo(rootNode);
+        } else if (patternClass.equals(MatchesFormDataPattern.class)) {
+            return deserializeFormData(rootNode);
         }
 
         Constructor<? extends StringValuePattern> constructor = findConstructor(patternClass);
@@ -121,6 +122,17 @@ public class StringValuePatternJsonDeserializer extends JsonDeserializer<StringV
         } else {
             return new EqualToJsonPattern(operand, ignoreArrayOrder, ignoreExtraElements);
         }
+    }
+
+    private MatchesFormDataPattern deserializeFormData(JsonNode rootNode) throws JsonMappingException {
+        if (!rootNode.has("matchesFormData")) {
+            throw new JsonMappingException(rootNode.toString() + " is not a valid match operation");
+        }
+
+        String expectedKey = rootNode.findValue("matchesFormData").textValue();
+        String expectedValue = (rootNode.has("value")) ? rootNode.findValue("value").textValue() : null;
+
+        return new MatchesFormDataPattern(expectedKey, expectedValue);
     }
 
     private MatchesJsonPathPattern deserialiseMatchesJsonPathPattern(JsonNode rootNode) throws JsonMappingException {
