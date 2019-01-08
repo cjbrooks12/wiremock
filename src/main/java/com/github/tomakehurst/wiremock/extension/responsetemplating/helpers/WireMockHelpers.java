@@ -50,6 +50,14 @@ public enum WireMockHelpers implements Helper<Object> {
             return this.helper.apply(String.valueOf(context), options);
         }
     },
+    formData {
+        private HandlebarsFormDataPathHelper helper = new HandlebarsFormDataPathHelper();
+
+        @Override
+        public Object apply(final Object context, final Options options) throws IOException {
+            return this.helper.apply(String.valueOf(context), options);
+        }
+    },
     randomValue {
         private HandlebarsRandomValuesHelper helper = new HandlebarsRandomValuesHelper();
 
